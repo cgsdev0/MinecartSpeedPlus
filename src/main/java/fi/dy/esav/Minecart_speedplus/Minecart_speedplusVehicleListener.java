@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import org.bukkit.Tag;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Minecart;
 import org.bukkit.event.EventHandler;
@@ -45,21 +46,21 @@ public class Minecart_speedplusVehicleListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onVehicleCreate(VehicleCreateEvent event) {
-		if (event.getVehicle() instanceof Minecart) {
-
-			Minecart cart = (Minecart) event.getVehicle();
-      log.info("Flying mod: " + cart.getFlyingVelocityMod());
-
-		}
-	}
-
-	@EventHandler(priority = EventPriority.NORMAL)
 	public void onVehicleMove(VehicleMoveEvent event) {
 
 		if (event.getVehicle() instanceof Minecart) {
 
 			Minecart cart = (Minecart) event.getVehicle();
+
+      Block below = cart.getLocation().getBlock().getRelative(BlockFace.DOWN);
+      if (below.getType() == Material.GOLD_BLOCK) {
+        cart.setMaxSpeed(4.0D);
+        return;
+      }
+      if (below.getType() == Material.COPPER_BLOCK) {
+        cart.setMaxSpeed(0.4D);
+        return;
+      }
 			for (int xmod : xmodifier) {
 				for (int ymod : ymodifier) {
 					for (int zmod : zmodifier) {
