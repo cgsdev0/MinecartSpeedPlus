@@ -2,6 +2,7 @@ package fi.dy.esav.Minecart_speedplus;
 
 import java.util.logging.Logger;
 
+import org.bukkit.Tag;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -16,23 +17,7 @@ import org.bukkit.util.Vector;
 public class Minecart_speedplusVehicleListener implements Listener {
 
 	public static boolean isSign(Material m) {
-		switch (m) {
-		case OAK_SIGN:
-		case OAK_WALL_SIGN:
-		case DARK_OAK_SIGN:
-		case DARK_OAK_WALL_SIGN:
-		case ACACIA_SIGN:
-		case ACACIA_WALL_SIGN:
-		case BIRCH_SIGN:
-		case BIRCH_WALL_SIGN:
-		case JUNGLE_SIGN:
-		case JUNGLE_WALL_SIGN:
-		case SPRUCE_SIGN:
-		case SPRUCE_WALL_SIGN:
-			return true;
-		default:
-			return false;
-		}
+    return Tag.SIGNS.isTagged(m);
 	}
 
 	int[] xmodifier = { -1, 0, 1 };
@@ -52,8 +37,8 @@ public class Minecart_speedplusVehicleListener implements Listener {
 
 	boolean error;
 
-	Vector flyingmod = new Vector(10, 0.01, 10);
-	Vector noflyingmod = new Vector(1, 1, 1);
+	Vector flyingmod = new Vector(0.99, 0.99, 0.99);
+	Vector noflyingmod = new Vector(0.95, 0.80, 0.95);
 
 	public Minecart_speedplusVehicleListener(Minecart_speedplus instance) {
 		plugin = instance;
@@ -64,7 +49,7 @@ public class Minecart_speedplusVehicleListener implements Listener {
 		if (event.getVehicle() instanceof Minecart) {
 
 			Minecart cart = (Minecart) event.getVehicle();
-			cart.setMaxSpeed(0.4 * Minecart_speedplus.getSpeedMultiplier());
+      log.info("Flying mod: " + cart.getFlyingVelocityMod());
 
 		}
 	}
