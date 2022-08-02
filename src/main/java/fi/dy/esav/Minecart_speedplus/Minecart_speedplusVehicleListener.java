@@ -39,7 +39,7 @@ public class Minecart_speedplusVehicleListener implements Listener {
 	boolean error;
 
 	Vector flyingmod = new Vector(0.99, 0.99, 0.99);
-	Vector noflyingmod = new Vector(0.95, 0.80, 0.95);
+	Vector noflyingmod = new Vector(0.95, 0.95, 0.95);
 
 	public Minecart_speedplusVehicleListener(Minecart_speedplus instance) {
 		plugin = instance;
@@ -48,84 +48,30 @@ public class Minecart_speedplusVehicleListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onVehicleMove(VehicleMoveEvent event) {
 
-		if (event.getVehicle() instanceof Minecart) {
+		if (!(event.getVehicle() instanceof Minecart)) return;
 
-			Minecart cart = (Minecart) event.getVehicle();
+    Minecart cart = (Minecart) event.getVehicle();
+    Block below = cart.getLocation().getBlock().getRelative(BlockFace.DOWN);
 
-      Block below = cart.getLocation().getBlock().getRelative(BlockFace.DOWN);
-      if (below.getType() == Material.GOLD_BLOCK) {
-        cart.setMaxSpeed(4.0D);
-        return;
-      }
-      if (below.getType() == Material.COPPER_BLOCK) {
+    switch(below.getType()) {
+      case COPPER_BLOCK:
         cart.setMaxSpeed(0.4D);
-        return;
-      }
-			for (int xmod : xmodifier) {
-				for (int ymod : ymodifier) {
-					for (int zmod : zmodifier) {
-
-						cartx = cart.getLocation().getBlockX();
-						carty = cart.getLocation().getBlockY();
-						cartz = cart.getLocation().getBlockZ();
-						blockx = cartx + xmod;
-						blocky = carty + ymod;
-						blockz = cartz + zmod;
-						block = cart.getWorld().getBlockAt(blockx, blocky,
-						                                   blockz);
-						Material mat = cart.getWorld().getBlockAt(blockx, blocky, blockz).getType();
-
-						if (this.isSign(mat)) {
-							Sign sign = (Sign) block.getState();
-							String[] text = sign.getLines();
-
-							if (text[0].equalsIgnoreCase("[msp]")) {
-
-								if (text[1].equalsIgnoreCase("fly")) {
-									cart.setFlyingVelocityMod(flyingmod);
-
-								} else if (text[1].equalsIgnoreCase("nofly")) {
-
-									cart.setFlyingVelocityMod(noflyingmod);
-
-								} else {
-
-									error = false;
-									try {
-
-										line1 = Double.parseDouble(text[1]);
-
-									} catch (Exception e) {
-
-										sign.setLine(2, "  ERROR");
-										sign.setLine(3, "WRONG VALUE");
-										sign.update();
-										error = true;
-
-									}
-									if (!error) {
-
-										if (0 < line1 & line1 <= 50) {
-
-											cart.setMaxSpeed(0.4D * Double.parseDouble(text[1]));
-
-										} else {
-
-											sign.setLine(2, "  ERROR");
-											sign.setLine(3, "WRONG VALUE");
-											sign.update();
-										}
-									}
-								}
-							}
-
-						}
-
-					}
-				}
-			}
-
-		}
-	}
-
+        cart.setFlyingVelocityMod(noflyingmod);
+        break;
+      case LAPIS_BLOCK:
+        cart.setMaxSpeed(2.0D);
+        cart.setFlyingVelocityMod(noflyingmod);
+        break;
+      case GOLD_BLOCK:
+        cart.setMaxSpeed(4.0D);
+        cart.setFlyingVelocityMod(noflyingmod);
+        break;
+      case NETHERITE_BLOCK:
+        cart.setMaxSpeed(6.0D);
+        cart.setFlyingVelocityMod(flyingmod);
+        break;
+      default:
+        break;
+    }
+  }
 }
