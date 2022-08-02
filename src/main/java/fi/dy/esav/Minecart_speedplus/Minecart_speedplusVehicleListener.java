@@ -1,7 +1,6 @@
 package fi.dy.esav.Minecart_speedplus;
 
 
-import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Minecart;
@@ -13,8 +12,8 @@ import org.bukkit.util.Vector;
 
 public class Minecart_speedplusVehicleListener implements Listener {
 
-	private final static Vector flyingmod = new Vector(0.99, 0.99, 0.99);
-	private final static Vector noflyingmod = new Vector(0.95, 0.95, 0.95);
+  private final static Vector flyingmod = new Vector(0.99, 0.99, 0.99);
+  private final static Vector noflyingmod = new Vector(0.95, 0.95, 0.95);
 
   private BlockFace velocityToBlockFace(Vector v) {
     if (Math.abs(v.getX()) > Math.abs(v.getZ())) {
@@ -43,7 +42,6 @@ public class Minecart_speedplusVehicleListener implements Listener {
       case WAXED_COPPER_BLOCK:
         cart.setMaxSpeed(0.4D);
         cart.setFlyingVelocityMod(noflyingmod);
-        Bukkit.getLogger().info("COPPER TRIGGER");
         break;
       case LAPIS_BLOCK:
         cart.setMaxSpeed(2.0D);
@@ -52,7 +50,6 @@ public class Minecart_speedplusVehicleListener implements Listener {
       case GOLD_BLOCK:
         cart.setMaxSpeed(4.0D);
         cart.setFlyingVelocityMod(noflyingmod);
-        Bukkit.getLogger().info("GOLD TRIGGER");
         break;
       case NETHERITE_BLOCK:
         cart.setMaxSpeed(6.0D);
@@ -60,13 +57,14 @@ public class Minecart_speedplusVehicleListener implements Listener {
         break;
       default:
         return false;
-    }
+      }
     return true;
   }
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onVehicleMove(VehicleMoveEvent event) {
 
-		if (!(event.getVehicle() instanceof Minecart)) return;
+  @EventHandler(priority = EventPriority.NORMAL)
+  public void onVehicleMove(VehicleMoveEvent event) {
+
+    if (!(event.getVehicle() instanceof Minecart)) return;
 
     Minecart cart = (Minecart) event.getVehicle();
     Block below = cart.getLocation().getBlock().getRelative(BlockFace.DOWN);
